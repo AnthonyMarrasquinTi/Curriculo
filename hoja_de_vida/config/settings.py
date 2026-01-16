@@ -21,7 +21,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "anthonymarrasquinhoja.onrender.com",
+    "curriculo.onrender.com",
 ]
 
 if DEBUG:
