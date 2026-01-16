@@ -1,0 +1,710 @@
+/* ====================================================================
+   CV PDF - 100% A4 SIN ESPACIOS BLANCOS
+   ULTRA COMPATIBLE CON WEASYPRINT | SIN FLEXBOX | SIN ESPACIOS
+   ==================================================================== */
+
+/* ====================================
+   @PAGE - SIN MÁRGENES EXTERNOS NINGÚN
+   ==================================== */
+@page {
+    size: A4 portrait;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* ====================================
+   RESET TOTAL AGRESIVO - ELIMINA CUALQUIER ESPACIO
+   ==================================== */
+* {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    border: none !important;
+    border-collapse: collapse !important;
+}
+
+/* ====================================
+   HTML - DIMENSIONES EXACTAS A4
+   ==================================== */
+html {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    overflow: hidden !important;
+}
+
+/* ====================================
+   BODY - 100% A4 SIN ESPACIOS
+   ==================================== */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: #1a1a2e;
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    overflow: visible !important;
+    border: none !important;
+    position: relative !important;
+} 
+
+/* ====================================
+   OCULTAR BOTONES Y ELEMENTOS WEB
+   ==================================== */
+.btn,
+.btn-admin,
+.btn-cert,
+.btn-action,
+.action-buttons,
+.cert-actions,
+.no-print,
+.header-right,
+a.btn,
+a.btn-cert,
+a.btn-action,
+button,
+[class*="btn-"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* ====================================
+   PÁGINA - EXACTAMENTE 210mm x 297mm SIN ESPACIOS
+   ==================================== */
+.cv-page {
+    width: 210mm !important;
+    height: 297mm !important;
+    background: white !important;
+    page-break-after: always;
+    overflow: hidden !important; /* CAMBIO: hidden para controlar overflow */
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    border: none !important;
+    display: block !important;
+}
+
+.cv-page:last-child {
+    page-break-after: avoid;
+}
+
+/* ====================================
+   HEADER - OCUPA EXACTAMENTE SU ESPACIO SIN HUECOS
+   ==================================== */
+.cv-header {
+    background: #1e3a5f !important;
+    width: 210mm !important;
+    height: 25mm !important; /* ALTURA FIJA EXACTA */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 10 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important; /* CENTRA EL CONTENIDO */
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+} 
+
+.header-content {
+    width: 100% !important;
+    padding: 0 15mm !important; /* PADDING INTERNO DEL HEADER */
+    box-sizing: border-box !important;
+}
+
+.header-left {
+    width: 100%;
+}
+
+.full-name {
+    font-size: 16pt;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 1mm;
+    line-height: 1.1;
+}
+
+.profession {
+    font-size: 9pt;
+    font-weight: normal;
+    color: white;
+    line-height: 1.2;
+}
+
+/* ====================================
+   BODY - OCUPA EXACTAMENTE EL ESPACIO RESTANTE (272mm)
+   ==================================== */
+.cv-body {
+    width: 210mm !important;
+    height: 272mm !important; /* 297mm - 25mm = 272mm EXACTO */
+    position: absolute !important;
+    top: 25mm !important; /* EXACTAMENTE DEBAJO DEL HEADER */
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important; /* CONTROLA OVERFLOW */
+}
+
+/* ====================================
+   SIDEBAR - OCUPA EXACTAMENTE 67.2mm (32%) SIN ESPACIOS
+   ==================================== */
+.cv-sidebar {
+    position: absolute !important;
+    right: 0 !important; /* TOCA EXACTAMENTE EL BORDE DERECHO */
+    top: 0 !important;
+    width: 67.2mm !important; /* 210mm × 0.32 = 67.2mm EXACTO */
+    height: 272mm !important; /* 100% DEL BODY (272mm) */
+    background: #065f46 !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    overflow: visible !important;
+    padding: 6mm !important; /* PADDING INTERNO PARA CONTENIDO */
+    margin: 0 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+    display: block !important;
+}
+
+/* ====================================
+   MAIN CONTENT - OCUPA EXACTAMENTE 142.8mm (68%) SIN ESPACIOS
+   ==================================== */
+.cv-main {
+    position: absolute !important;
+    left: 0 !important; /* TOCA EXACTAMENTE EL BORDE IZQUIERDO */
+    top: 0 !important;
+    width: 142.8mm !important; /* 210mm × 0.68 = 142.8mm EXACTO */
+    height: 272mm !important; /* 100% DEL BODY (272mm) */
+    background: white !important;
+    overflow: visible !important;
+    padding: 10mm !important; /* PADDING INTERNO PARA CONTENIDO */
+    margin: 0 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+    display: block !important;
+} 
+
+/* ====================================
+   SECCIONES - ESPACIADO MÍNIMO PARA MAXIMIZAR ESPACIO
+   ==================================== */
+.main-section {
+    margin-bottom: 2mm !important; /* ESPACIADO MÍNIMO */
+    margin-top: 0 !important;
+    page-break-inside: avoid !important;
+}
+
+.section-header {
+    margin-bottom: 1mm !important;
+    margin-top: 0 !important;
+}
+
+.section-icon {
+    font-size: 18pt;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.section-title {
+    font-size: 13pt;
+    font-weight: bold;
+    color: #1e293b;
+    text-transform: uppercase;
+    display: inline-block;
+    vertical-align: middle;
+    border-bottom: 2.5px solid #1e3a5f; /* LÍNEA MÁS NÍTIDA */
+    padding-bottom: 4px;
+}
+
+/* ====================================
+   TIMELINE
+   ==================================== */
+.timeline-block {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 18px;
+    page-break-inside: avoid;
+}
+
+.timeline-block::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 16px;
+    width: 2px;
+    height: 100%;
+    background: #94a3b8; /* COLOR MÁS NÍTIDO */
+    border-radius: 1px; /* LIGERO REDONDEO PARA DEFINICIÓN */
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    background: #1e3a5f;
+    border-radius: 50%;
+    border: 2px solid white; /* BORDE MÁS NÍTIDO */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* SOMBRA SUAVE PARA PROFUNDIDAD */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.timeline-content {
+    margin-left: 6px;
+}
+
+/* ====================================
+   CARDS - NITIDEZ PROFESIONAL PARA PDF
+   ==================================== */
+.experience-card,
+.education-card,
+.award-card,
+.product-card,
+.garage-card {
+    background: #f8fafc !important;
+    border: 1.5px solid #cbd5e1 !important; /* BORDE MÁS DEFINIDO Y NÍTIDO */
+    border-radius: 3px !important; /* RADIO MÁS DEFINIDO */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important; /* SOMBRA SUAVE PERO NÍTIDA */
+    padding: 1.5mm !important; /* PADDING REDUCIDO */
+    margin-bottom: 1.5mm !important; /* MARGEN REDUCIDO */
+    margin-top: 0 !important;
+    page-break-inside: avoid !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
+
+.company-name {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #1e3a5f;
+    margin-bottom: 10px;
+    border-left: 3px solid #1e3a5f;
+    padding-left: 8px;
+}
+
+.card-header {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.position-title,
+.course-title,
+.product-title {
+    font-size: 9.5pt;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.date-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 7.5pt;
+    font-weight: bold;
+    border-radius: 8px; /* RADIO MÁS DEFINIDO */
+    border: 1.5px solid #cbd5e1; /* BORDE MÁS NÍTIDO */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.location-tag {
+    font-size: 8pt;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.description-text {
+    font-size: 8pt;
+    line-height: 1.5;
+    color: #475569;
+    margin-bottom: 8px;
+    text-align: justify;
+}
+
+/* ====================================
+   CONTACT GRID (TABLA SIMPLE)
+   ==================================== */
+.contact-grid {
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px;
+    background: #f8fafc;
+    border-radius: 4px;
+    border: 1px dashed #cbd5e1;
+}
+
+.contact-item {
+    margin-bottom: 4px;
+    font-size: 7.5pt;
+    color: #475569;
+}
+
+.contact-icon {
+    font-size: 9pt;
+    margin-right: 5px;
+}
+
+.contact-text,
+.contact-link {
+    color: #475569;
+}
+
+/* ====================================
+   EDUCATION
+   ==================================== */
+.institution-name {
+    font-size: 8pt;
+    font-weight: bold;
+    color: #047857;
+    margin-bottom: 4px;
+}
+
+.hours-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    background: #fef3c7;
+    color: #78350f;
+    font-size: 7pt;
+    font-weight: bold;
+    border-radius: 6px; /* RADIO MÁS DEFINIDO */
+    border: 1px solid #f59e0b; /* BORDE NÍTIDO PARA CONTRASTE */
+    margin-bottom: 6px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ====================================
+   AWARDS
+   ==================================== */
+.award-type {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #dc2626;
+    color: white;
+    font-size: 7pt;
+    font-weight: bold;
+    border-radius: 3px; /* RADIO MÁS DEFINIDO */
+    border: 1px solid #b91c1c; /* BORDE NÍTIDO PARA DEFINICIÓN */
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.award-title {
+    font-size: 9.5pt;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 5px;
+}
+
+.award-meta {
+    margin-bottom: 6px;
+}
+
+.award-entity {
+    font-size: 8pt;
+    font-weight: bold;
+    color: #047857;
+    margin-right: 8px;
+}
+
+.award-date {
+    font-size: 7.5pt;
+    color: #64748b;
+    font-style: italic;
+}
+
+/* ====================================
+   PRODUCTS
+   ==================================== */
+.product-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    background: #e0e7ff;
+    color: #3730a3;
+    font-size: 7pt;
+    font-weight: bold;
+    border-radius: 6px; /* RADIO MÁS DEFINIDO */
+    border: 1px solid #6366f1; /* BORDE NÍTIDO PARA CONTRASTE */
+    margin-bottom: 5px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.product-date {
+    font-size: 7.5pt;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+/* ====================================
+   GARAGE
+   ==================================== */
+.garage-meta {
+    margin-bottom: 6px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #d1fae5;
+    color: #065f46;
+    font-size: 7pt;
+    font-weight: bold;
+    border-radius: 6px; /* RADIO MÁS DEFINIDO */
+    border: 1px solid #10b981; /* BORDE NÍTIDO PARA CONTRASTE */
+    text-transform: uppercase;
+    margin-right: 6px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.price-tag {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #1e3a5f;
+    color: white;
+    font-size: 8.5pt;
+    font-weight: bold;
+    border-radius: 6px; /* RADIO MÁS DEFINIDO */
+    border: 1px solid #1e40af; /* BORDE NÍTIDO PARA DEFINICIÓN */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ====================================
+   SIDEBAR VERDE - REPETICIÓN EN PÁGINAS
+   ==================================== */
+
+/* ====================================
+   FONDO SIDEBAR VERDE - SE REPITE EN CADA PÁGINA SIN DUPLICAR CONTENIDO
+   ==================================== */
+.cv-page::after {
+    content: '' !important;
+    position: fixed !important;
+    top: 25mm !important; /* EXACTAMENTE DEBAJO DEL HEADER */
+    right: 0 !important; /* TOCA EL BORDE DERECHO */
+    width: 67.2mm !important; /* ANCHO EXACTO DEL SIDEBAR */
+    height: 272mm !important; /* ALTO EXACTO DEL BODY */
+    background: #065f46 !important; /* COLOR VERDE EXACTO */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    z-index: -2 !important; /* DETRÁS DE TODO EL CONTENIDO */
+    pointer-events: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+    display: block !important;
+}
+
+/* ====================================
+   FUERZA ESPACIADO MÍNIMO EN TODO EL CONTENIDO PARA MAXIMIZAR USO DE ESPACIO
+   ==================================== */
+.cv-main * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.cv-sidebar * {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.photo-container {
+    text-align: center !important;
+    margin-bottom: 1mm !important;
+    margin-top: 0 !important;
+}
+
+.profile-photo {
+    width: 18mm;
+    height: 18mm;
+    border-radius: 50%;
+    border: 1mm solid rgba(255, 255, 255, 0.3);
+    display: block;
+    margin: 0 auto;
+}
+
+.profile-photo.placeholder {
+    width: 18mm;
+    height: 18mm;
+    border-radius: 50%;
+    background: #047857;
+    color: white;
+    font-size: 8pt;
+    font-weight: bold;
+    line-height: 18mm;
+    text-align: center;
+    border: 1mm solid rgba(255, 255, 255, 0.3);
+    margin: 0 auto;
+}
+
+.sidebar-section {
+    margin-bottom: 1.5mm !important;
+    margin-top: 0 !important;
+}
+
+.sidebar-title {
+    font-size: 8pt !important;
+    font-weight: bold !important;
+    color: white !important;
+    text-transform: uppercase !important;
+    margin-bottom: 1mm !important;
+    padding-bottom: 0.5mm !important;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.4) !important; /* LÍNEA MÁS DEFINIDA */
+}
+
+.sidebar-content {
+    font-size: 8pt;
+}
+
+.info-item {
+    margin-bottom: 0.5mm !important;
+    padding-bottom: 0.5mm !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important; /* LÍNEA MÁS NÍTIDA */
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-item.icon .icon-label {
+    font-size: 11pt;
+    margin-right: 6px;
+}
+
+.info-label {
+    display: block;
+    font-size: 6.5pt;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.info-value,
+.info-link {
+    display: block;
+    font-size: 8pt;
+    font-weight: bold;
+    color: white;
+    word-wrap: break-word;
+}
+
+/* Habilidades */
+.skills-container {
+    margin-top: 8px;
+}
+
+.skill-pill {
+    display: inline-block;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 7.5pt;
+    font-weight: bold;
+    border-radius: 8px; /* RADIO MÁS DEFINIDO */
+    border: 1.5px solid rgba(255, 255, 255, 0.4); /* BORDE MÁS NÍTIDO */
+    margin-right: 4px;
+    margin-bottom: 4px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.interests-text {
+    color: white;
+    font-size: 8pt;
+    line-height: 1.5;
+}
+
+/* ====================================
+   CERTIFICADOS - 100% A4 SIN ESPACIOS
+   ==================================== */
+.certificate-page {
+    padding: 0; /* SIN PADDING EXTERNO */
+    text-align: center;
+    width: 210mm;
+    height: 297mm;
+    page-break-after: always;
+    box-sizing: border-box;
+    margin: 0;
+    border: none;
+}
+
+/* Contenido del certificado con padding interno */
+.certificate-page > * {
+    padding: 15mm !important; /* PADDING INTERNO */
+    box-sizing: border-box !important;
+}
+
+.certificate-wrapper {
+    width: 100%;
+}
+
+.certificate-title {
+    font-size: 16pt;
+    font-weight: bold;
+    color: #1e3a5f;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.certificate-frame {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.certificate-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ====================================
+   FORZAR COLORES EN PRINT
+   ==================================== */
+.cv-header,
+.cv-sidebar,
+.timeline-marker,
+.award-type,
+.date-badge,
+.hours-badge,
+.status-badge,
+.price-tag,
+.product-tag,
+.skill-pill {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+}

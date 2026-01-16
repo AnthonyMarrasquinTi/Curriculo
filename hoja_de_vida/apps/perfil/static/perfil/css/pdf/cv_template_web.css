@@ -1,0 +1,154 @@
+/* PDF-only stylesheet derived from `cv_clean.css` for WeasyPrint
+   - A4 with 15mm margins
+   - No JS, no external fonts
+   - Fixed sidebar (repeated on each page via position: fixed)
+   - Avoid breaking sections and cards across pages
+   - Hide interactive elements
+*/
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+@page { size: A4; margin: 15mm; }
+
+html, body {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: #1a1a2e;
+    background: #f8f9fa;
+}
+
+/* Page container (each printed page) */
+.cv-page { width: 100%; min-height: calc(297mm - 30mm); height: calc(297mm - 30mm); background: #f8f9fa; padding: 0; margin-bottom: 0; }
+
+
+/* Header */
+.cv-header { background: linear-gradient(135deg, #1e3a5f 0%, #0d2436 50%, #0f2940 100%); padding: 14px 20px; color: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; box-shadow: 0 1px 2px rgba(0,0,0,0.08); width: 100%; margin: 0; position: relative; z-index: 10; }
+.header-content { display: flex; justify-content: space-between; align-items: center; }
+.full-name { font-size: 28pt; font-weight: 900; color: white; margin-bottom: 4px; }
+.profession { font-size: 12pt; color: rgba(255,255,255,0.95); }
+
+/* Layout: sidebar background fixed on right (repeats visually); sidebar content renders once */
+.cv-body { position: relative; min-height: calc(297mm - 60px); }
+.cv-sidebar-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(180deg, #065f46 0%, #038c5a 30%, #047857 70%, #065f46 100%);
+    z-index: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.cv-sidebar {
+    position: relative; /* render in document flow once (first page) */
+    float: right;
+    width: 30%;
+    background: transparent;
+    padding: 16px 12px;
+    color: white;
+    page-break-inside: avoid;
+    max-height: calc(297mm - 40mm);
+    overflow: hidden;
+    z-index: 1;
+    
+}
+
+/* Main content takes the remaining width and avoids overlap with fixed sidebar */
+.cv-main { margin-right: 31%; padding: 20px 18px; background: #f8f9fa; min-height: calc(297mm - 40mm); }
+
+/* Visual content cards and sections */
+.main-section { margin-bottom: 20px; position: relative; }
+.main-section:not(:first-of-type)::before {
+    content: '';
+    position: absolute;
+    top: -14px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #b8c4d1 15%, #b8c4d1 85%, transparent 100%);
+    opacity: 0.4;
+}
+/* Vertical timeline lines for main sections */
+.main-section .section-content {
+    position: relative;
+    padding-left: 12px;
+}
+.main-section .section-content::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #1e3a5f;
+    opacity: 0.2;
+}
+.section-header { margin-bottom: 10px; }
+.section-title { font-size: 14pt; font-weight: 800; color: #1e293b; }
+
+/* Prevent breaking inside cards */
+.experience-card, .education-card, .award-card, .product-card, .garage-card { page-break-inside: avoid; -webkit-column-break-inside: avoid; break-inside: avoid; background: linear-gradient(135deg, #ffffff 0%, #f6f8fa 100%); border: 1px solid #b8c4d1; border-radius: 4px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 1px 1px rgba(0,0,0,0.05); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+/* Remove interactive visuals and heavy shadows for PDF */
+.btn, .btn-admin, .btn-cert, .btn-action, .action-buttons, .cert-actions, .no-print { display: none !important; }
+.experience-card:hover, .education-card:hover { box-shadow: none; transform: none; }
+
+/* Ensure headings do not become widows/orphans */
+h1, h2, h3, h4 { widows: 2; orphans: 2; }
+.section-title { page-break-after: avoid; }
+
+/* Contact grid compact layout for PDF */
+.contact-grid { display: block; margin-top: 14px; background: linear-gradient(135deg, #f6f8fa 0%, #eef2f6 100%); border-radius: 4px; padding: 15px; border: 1px solid #b8c4d1; box-shadow: inset 0 1px 1px rgba(0,0,0,0.04); }
+.contact-item { display: block; margin-bottom: 8px; }
+
+/* Sidebar content */
+/* Background-only fixed element (.cv-sidebar-bg) provides the repeating green column visual.
+   The actual sidebar content (.cv-sidebar) is rendered once (class .first-page-only) and limited
+   to the first page area (max-height + overflow:hidden) so it doesn't duplicate on following pages. */
+
+.cv-sidebar-bg { /* defined above; additional safe settings */ }
+
+.first-page-only { page-break-inside: avoid; page-break-after: avoid; }
+
+.photo-container { text-align: center; margin-bottom: 18px; position: relative; }
+.profile-photo { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid rgba(255,255,255,0.3); box-shadow: 0 4px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08); }
+.sidebar-section { margin-bottom: 18px; }
+.sidebar-title { font-size: 11pt; font-weight: 800; color: white; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px; position: relative; }
+.sidebar-title::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+}
+.info-item { margin-bottom: 8px; }
+.info-label { font-size: 8pt; color: rgba(255,255,255,0.75); display: block; margin-bottom: 4px; }
+.info-value { font-size: 9pt; font-weight: 600; color: white; }
+
+/* Certificate page styles (full A4 centered) */
+.certificate-page { page-break-before: always; page-break-after: always; width: 100%; height: calc(297mm - 30mm); display: flex; align-items: center; justify-content: center; padding: 15mm; }
+.certificate-wrapper { width: 100%; text-align: center; }
+.certificate-title { font-size: 20pt; font-weight: 800; color: #1e3a5f; margin-bottom: 22px; text-transform: uppercase; }
+.certificate-frame { width: 100%; max-width: 180mm; margin: 0 auto; border: 3px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+.certificate-image { width: 100%; height: auto; display: block; }
+
+/* Print-specific adjustments */
+@media print {
+    body { background: white; padding: 0; }
+    .cv-page { margin: 0; page-break-after: always; box-shadow: none; border-radius: 0; }
+    /* Keep the sidebar background fixed and printed on every page */
+    .cv-sidebar-bg { position: fixed; }
+}
+
+/* Safety: force small font sizes not to overflow */
+.description-text { font-size: 10pt; line-height: 1.4; color: #475569; }
+
+/* Minor helpers */
+.hidden-for-pdf { display: none !important; }
+
+/* End of PDF stylesheet */
