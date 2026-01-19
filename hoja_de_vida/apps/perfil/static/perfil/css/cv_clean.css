@@ -1,5 +1,6 @@
 /* ====================================
    CV PREMIUM - DISEÑO PROFESIONAL WOW
+   OPTIMIZADO PARA IMPRESIÓN DEL NAVEGADOR
    ==================================== */
 
 * {
@@ -8,9 +9,10 @@
     box-sizing: border-box;
 }
 
+/* ✅ SIN MÁRGENES PARA PDF */
 @page {
     size: A4;
-    margin: 15mm;
+    margin: 0mm;
 }
 
 html, body {
@@ -35,10 +37,10 @@ body {
     background: white;
     padding: 0;
     margin-bottom: 20px;
-    page-break-after: always;
+    page-break-after: auto;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .cv-page:last-child {
@@ -53,6 +55,8 @@ body {
     padding: 30px 40px;
     position: relative;
     overflow: hidden;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 
 .cv-header::before {
@@ -144,21 +148,23 @@ body {
     background: linear-gradient(180deg, #065f46 0%, #047857 100%);
     padding: 35px 25px;
     color: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 
 /* ====================================
    SECCIONES PRINCIPALES
    ==================================== */
 .main-section {
-    margin-bottom: 35px;
-    page-break-inside: avoid;
+    margin-bottom: 28px;
+    page-break-inside: auto;
 }
 
 .section-header {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
 .section-icon {
@@ -234,8 +240,8 @@ body {
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 25px;
+    margin-bottom: 18px;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
@@ -250,10 +256,10 @@ body {
 }
 
 .company-name {
-    font-size: 13pt;
+    font-size: 13.5pt;
     font-weight: 800;
     color: #1e3a5f;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     display: inline-block;
     position: relative;
     padding-left: 15px;
@@ -282,7 +288,7 @@ body {
 .position-title,
 .course-title,
 .product-title {
-    font-size: 11pt;
+    font-size: 11.5pt;
     font-weight: 700;
     color: #1e293b;
     flex: 1;
@@ -746,58 +752,81 @@ body {
 }
 
 /* ====================================
-   PRINT STYLES
+   PRINT STYLES - OPTIMIZADO PARA NAVEGADOR
    ==================================== */
 .no-print {
     display: block;
 }
 
 @media print {
-    body {
+    /* ✅ CERO PADDING Y MÁRGENES EN IMPRESIÓN */
+    html, body {
+        width: 210mm;
+        height: auto;
+        margin: 0 !important;
+        padding: 0 !important;
         background: white;
-        padding: 0;
     }
 
+    body {
+        max-width: 100%;
+    }
+
+    /* ✅ CV OCUPA TODA LA PÁGINA */
     .cv-page {
-        box-shadow: none;
-        margin: 0;
-        border-radius: 0;
-        page-break-after: always;
+        width: 210mm;
+        min-height: 297mm;
+        height: auto;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: auto;
+        page-break-inside: auto;
     }
 
-    .action-buttons {
+    /* ✅ PERMITIR SALTOS EN SECCIONES */
+    .main-section {
+        page-break-inside: auto;
+    }
+
+    /* ✅ EVITAR SALTOS EN CARDS INDIVIDUALES */
+    .experience-card,
+    .education-card,
+    .award-card,
+    .product-card,
+    .garage-card {
+        page-break-inside: avoid;
+    }
+
+    /* ✅ OCULTAR ELEMENTOS NO NECESARIOS */
+    .action-buttons,
+    .cert-actions,
+    .btn-cert,
+    .no-print,
+    .btn-admin,
+    .header-right {
         display: none !important;
     }
 
-    .cert-actions {
-        display: none !important;
-    }
-
-    .btn-cert {
-        display: none !important;
-    }
-
-    .no-print {
-        display: none !important;
-    }
-
+    /* ✅ FORZAR COLORES DE FONDO */
     .cv-sidebar {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 
     .cv-header {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 
-    /* Optimize first page spacing */
+    /* ✅ AJUSTAR ESPACIADO */
     .cv-page:first-of-type .cv-main {
-        padding: 20px 40px 35px 40px;
+        padding: 35px 40px;
     }
 
     .cv-page:first-of-type .cv-sidebar {
-        padding: 20px 25px 35px 25px;
+        padding: 35px 25px;
     }
 
     .cv-page:first-of-type .main-section:first-of-type {
