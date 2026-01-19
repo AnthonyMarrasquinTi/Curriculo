@@ -769,6 +769,14 @@ body {
         display: none !important;
     }
 
+    .cert-actions {
+        display: none !important;
+    }
+
+    .btn-cert {
+        display: none !important;
+    }
+
     .no-print {
         display: none !important;
     }
