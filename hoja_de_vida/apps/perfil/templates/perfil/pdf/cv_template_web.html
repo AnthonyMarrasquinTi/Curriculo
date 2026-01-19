@@ -29,9 +29,7 @@
 
             <aside class="cv-sidebar first-page-only">
                 <div class="photo-container">
-                    {% if foto_perfil_proxy_url %}
-                        <img src="{{ foto_perfil_proxy_url }}" alt="Foto de perfil" class="profile-photo">
-                    {% elif perfil.foto_perfil_url %}
+                    {% if perfil.foto_perfil_url %}
                         <img src="{{ perfil.foto_perfil_url }}" alt="Foto de perfil" class="profile-photo">
                     {% else %}
                         <div class="profile-photo placeholder">{{ perfil.nombres|first }}{{ perfil.apellidos|first }}</div>
