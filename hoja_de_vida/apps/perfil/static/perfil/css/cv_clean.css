@@ -765,6 +765,10 @@ body {
         page-break-after: always;
     }
 
+    .action-buttons {
+        display: none !important;
+    }
+
     .no-print {
         display: none !important;
     }
@@ -777,6 +781,19 @@ body {
     .cv-header {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
+    }
+
+    /* Optimize first page spacing */
+    .cv-page:first-of-type .cv-main {
+        padding: 20px 40px 35px 40px;
+    }
+
+    .cv-page:first-of-type .cv-sidebar {
+        padding: 20px 25px 35px 25px;
+    }
+
+    .cv-page:first-of-type .main-section:first-of-type {
+        margin-bottom: 20px;
     }
 }
 
