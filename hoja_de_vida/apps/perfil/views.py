@@ -80,6 +80,46 @@ def get_pdf_css():
     return ''
 
 
+def _get_foto_perfil_base64(perfil):
+    """Download profile photo from Azure URL and return as base64 data URL for PDF embedding.
+    
+    This ensures the photo works in PDF generation in both local and production (Render) environments.
+    Returns None if photo is not available or download fails.
+    """
+    if not getattr(perfil, 'foto_perfil_url', None):
+        return None
+    
+    try:
+        from apps.trayectoria.views import _download_blob_from_url
+        from urllib.request import urlopen
+        from urllib.parse import urlparse
+        
+        blob_url = perfil.foto_perfil_url
+        
+        # Try primary method: use existing helper
+        try:
+            data, filename = _download_blob_from_url(blob_url)
+        except Exception:
+            # Fallback: direct HTTP fetch
+            try:
+                resp = urlopen(blob_url, timeout=5)
+                data = resp.read()
+                filename = os.path.basename(urlparse(blob_url).path) or 'profile.png'
+            except Exception:
+                return None
+        
+        # Guess MIME type; default to PNG
+        mime, _ = mimetypes.guess_type(filename)
+        if not mime:
+            mime = 'image/png'
+        
+        # Convert to base64 data URL
+        b64 = base64.b64encode(data).decode('utf-8')
+        return f'data:{mime};base64,{b64}'
+    except Exception:
+        return None
+
+
 
 
 
@@ -261,8 +301,13 @@ def descargar_cv_pdf(request):
     ).order_by('nombreproducto')
 
     foto_perfil_proxy_url = None
+    foto_perfil_base64 = None
     if getattr(perfil, 'foto_perfil_url', None):
-        foto_perfil_proxy_url = f"{request.scheme}://{request.get_host()}/foto-perfil/"
+        # Try to get base64 version for PDF (works in both local and Render)
+        foto_perfil_base64 = _get_foto_perfil_base64(perfil)
+        # Fallback to proxy URL if base64 fails
+        if not foto_perfil_base64:
+            foto_perfil_proxy_url = f"{request.scheme}://{request.get_host()}/foto-perfil/"
 
     context = {
         'perfil': perfil,
@@ -275,6 +320,7 @@ def descargar_cv_pdf(request):
         'productos_laborales': productos_laborales,
         'ventas_garage': ventas_garage,
         'foto_perfil_proxy_url': foto_perfil_proxy_url,
+        'foto_perfil_base64': foto_perfil_base64,
         'certificates': [],
     }
 
@@ -409,8 +455,13 @@ def descargar_cv_completo_pdf(request):
             })
 
     foto_perfil_proxy_url = None
+    foto_perfil_base64 = None
     if getattr(perfil, 'foto_perfil_url', None):
-        foto_perfil_proxy_url = f"{request.scheme}://{request.get_host()}/foto-perfil/"
+        # Try to get base64 version for PDF (works in both local and Render)
+        foto_perfil_base64 = _get_foto_perfil_base64(perfil)
+        # Fallback to proxy URL if base64 fails
+        if not foto_perfil_base64:
+            foto_perfil_proxy_url = f"{request.scheme}://{request.get_host()}/foto-perfil/"
 
     context = {
         'perfil': perfil,
@@ -423,6 +474,7 @@ def descargar_cv_completo_pdf(request):
         'productos_laborales': productos_laborales,
         'ventas_garage': ventas_garage,
         'foto_perfil_proxy_url': foto_perfil_proxy_url,
+        'foto_perfil_base64': foto_perfil_base64,
     }
 
     # Generate CV PDF using the PDF-only template (no interactive elements)

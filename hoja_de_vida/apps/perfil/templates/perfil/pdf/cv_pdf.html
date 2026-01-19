@@ -294,7 +294,11 @@
             <aside class="cv-sidebar">
                 <!-- Foto -->
                 <div class="photo-container">
-                    {% if perfil.foto_perfil_url %}
+                    {% if foto_perfil_base64 %}
+                        <img src="{{ foto_perfil_base64 }}" alt="Foto de perfil" class="profile-photo">
+                    {% elif foto_perfil_proxy_url %}
+                        <img src="{{ foto_perfil_proxy_url }}" alt="Foto de perfil" class="profile-photo">
+                    {% elif perfil.foto_perfil_url %}
                         <img src="{{ perfil.foto_perfil_url }}" alt="Foto de perfil" class="profile-photo">
                     {% else %}
                         <div class="profile-photo placeholder">
