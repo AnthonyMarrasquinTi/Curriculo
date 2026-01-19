@@ -475,9 +475,9 @@
 
     <!-- Botones de acción (solo al final) -->
     <div class="action-buttons">
-        <a class="btn-action outline" href="{% url 'descargar_cv_pdf' %}">
-            <span class="btn-icon">📄</span> Check
-        </a>
+        <button class="btn-action outline" onclick="window.print()">
+            <span class="btn-icon">🖨️</span> Imprimir PDF
+        </button>
         <a class="btn-action primary" href="{% url 'descargar_cv_completo_pdf' %}?check_all=1">
             <span class="btn-icon">📦</span> Check All
         </a>
