@@ -785,6 +785,26 @@ body {
         page-break-inside: auto;
     }
 
+    /* ✅ EXTENDER FONDO VERDE CON PSEUDO-ELEMENTO */
+    .cv-body::after {
+        content: '';
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: 32%;
+        height: 100vh;
+        background: linear-gradient(180deg, #065f46 0%, #047857 100%);
+        z-index: -1;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* ✅ SIDEBAR EN POSICIÓN RELATIVA */
+    .cv-sidebar {
+        position: relative;
+        z-index: 1;
+    }
+
     /* ✅ PERMITIR SALTOS EN SECCIONES */
     .main-section {
         page-break-inside: auto;
