@@ -78,9 +78,11 @@ class DatosPersonalesAdmin(admin.ModelAdmin):
 @admin.register(VisibilidadSecciones)
 class VisibilidadSeccionesAdmin(admin.ModelAdmin):
     list_display = ('perfil',)
-    readonly_fields = ('perfil',)
     
     fieldsets = (
+        ('Perfil Asociado', {
+            'fields': ('perfil',)
+        }),
         ('Checkboxes', {
             'fields': (
                 'mostrar_experiencia_laboral',
