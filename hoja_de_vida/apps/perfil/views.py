@@ -685,3 +685,95 @@ def ver_foto_perfil(request):
     resp['Content-Disposition'] = f'inline; filename="{filename}"'
     return resp
 
+
+# --- NUEVA FUNCIONALIDAD: Descarga de CV con selección de secciones ---
+
+def seleccionar_secciones_cv(request):
+    """Página para seleccionar qué secciones incluir en el CV descargado."""
+    perfil = DatosPersonales.objects.filter(perfilactivo=1).first()
+    if not perfil:
+        return HttpResponse('No active profile found.', status=404)
+    
+    # Verificar qué secciones tienen datos
+    context = {
+        'perfil': perfil,
+        'tiene_experiencias': ExperienciaLaboral.objects.filter(idperfilconqueestaactivo=perfil).exists(),
+        'tiene_cursos': CursoRealizado.objects.filter(idperfilconqueestaactivo=perfil).exists(),
+        'tiene_reconocimientos': Reconocimiento.objects.filter(idperfilconqueestaactivo=perfil).exists(),
+        'tiene_productos_academicos': ProductoAcademico.objects.filter(idperfilconqueestaactivo=perfil).exists(),
+        'tiene_productos_laborales': ProductoLaboral.objects.filter(idperfilconqueestaactivo=perfil).exists(),
+        'tiene_ventas': VentaGarage.objects.filter(idperfilconqueestaactivo=perfil).exists(),
+    }
+    return render(request, 'perfil/seleccionar_secciones.html', context)
+
+
+def descargar_cv_personalizado(request):
+    """Descarga el CV con solo las secciones seleccionadas."""
+    perfil = DatosPersonales.objects.filter(perfilactivo=1).first()
+    if not perfil:
+        return HttpResponse('No active profile found.', status=404)
+    
+    # Obtener selecciones del usuario
+    incluir_experiencia = request.GET.get('experiencia') == 'on'
+    incluir_cursos = request.GET.get('cursos') == 'on'
+    incluir_reconocimientos = request.GET.get('reconocimientos') == 'on'
+    incluir_productos_academicos = request.GET.get('productos_academicos') == 'on'
+    incluir_productos_laborales = request.GET.get('productos_laborales') == 'on'
+    incluir_ventas = request.GET.get('ventas') == 'on'
+    
+    # Obtener datos
+    experiencias = ExperienciaLaboral.objects.filter(idperfilconqueestaactivo=perfil).order_by('-fechainiciogestion') if incluir_experiencia else []
+    cursos = CursoRealizado.objects.filter(idperfilconqueestaactivo=perfil).order_by('-fechainicio') if incluir_cursos else []
+    reconocimientos = Reconocimiento.objects.filter(idperfilconqueestaactivo=perfil).order_by('-fechareconocimiento') if incluir_reconocimientos else []
+    productos_academicos = ProductoAcademico.objects.filter(idperfilconqueestaactivo=perfil) if incluir_productos_academicos else []
+    productos_laborales = ProductoLaboral.objects.filter(idperfilconqueestaactivo=perfil) if incluir_productos_laborales else []
+    ventas = VentaGarage.objects.filter(idperfilconqueestaactivo=perfil) if incluir_ventas else []
+    
+    # Obtener foto de perfil
+    foto_perfil_proxy_url = None
+    foto_perfil_base64 = None
+    if getattr(perfil, 'foto_perfil_url', None):
+        foto_perfil_base64 = _get_foto_perfil_base64(perfil)
+        if not foto_perfil_base64:
+            foto_perfil_proxy_url = f"{request.scheme}://{request.get_host()}/foto-perfil/"
+    
+    # Renderizar HTML con las secciones seleccionadas
+    html = render_to_string('perfil/cv_personalizado_pdf.html', {
+        'perfil': perfil,
+        'experiencias': experiencias,
+        'cursos': cursos,
+        'reconocimientos': reconocimientos,
+        'productos_academicos': productos_academicos,
+        'productos_laborales': productos_laborales,
+        'ventas': ventas,
+        'foto_perfil_proxy_url': foto_perfil_proxy_url,
+        'foto_perfil_base64': foto_perfil_base64,
+    }, request=request)
+    
+    # Preparar URLs absolutas
+    html = _prepare_html_for_pdf(html, request)
+    
+    # Convertir a PDF
+    try:
+        css_text = get_pdf_css()
+        pdf_bytes = HTML(string=html, base_url=request.build_absolute_uri('/')).write_pdf(
+            stylesheets=[CSS(string=css_text)]
+        )
+    except Exception as exc:
+        return HttpResponse(f'Error generating PDF: {exc}', status=500)
+    
+    # Retornar como descarga
+    response = HttpResponse(pdf_bytes, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="cv_personalizado.pdf"'
+    return response
+
+
+def marketplace(request):
+    """View for the marketplace showing only Venta de Garage products."""
+    ventas_garage = VentaGarage.objects.all().order_by('-idventagarage')
+    
+    context = {
+        'ventas_garage': ventas_garage,
+    }
+    
+    return render(request, 'perfil/marketplace.html', context)

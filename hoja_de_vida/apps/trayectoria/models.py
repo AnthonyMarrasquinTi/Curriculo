@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+from datetime import date
 from apps.perfil.models import DatosPersonales
 
 
@@ -20,6 +22,15 @@ class ExperienciaLaboral(models.Model):
 
     class Meta:
         db_table = 'EXPERIENCIALABORAL'
+
+    def clean(self):
+        """Validar fechas de experiencia laboral."""
+        if self.fechainiciogestion and self.fechafingestion:
+            if self.fechainiciogestion > self.fechafingestion:
+                raise ValidationError("error de fecha")
+        
+        if self.fechafingestion and self.fechafingestion > date(2026, 1, 31):
+            raise ValidationError("error de fecha")
 
 
 class Reconocimiento(models.Model):
@@ -43,6 +54,11 @@ class Reconocimiento(models.Model):
     class Meta:
         db_table = 'RECONOCIMIENTOS'
 
+    def clean(self):
+        """Validar fecha del reconocimiento."""
+        if self.fechareconocimiento and self.fechareconocimiento > date(2026, 1, 31):
+            raise ValidationError("error de fecha")
+
 
 class CursoRealizado(models.Model):
     idcursorealizado = models.AutoField(primary_key=True, db_column='idcursorealizado')
@@ -61,6 +77,15 @@ class CursoRealizado(models.Model):
 
     class Meta:
         db_table = 'CURSOSREALIZADOS'
+
+    def clean(self):
+        """Validar fechas del curso."""
+        if self.fechainicio and self.fechafin:
+            if self.fechainicio > self.fechafin:
+                raise ValidationError("error de fecha")
+        
+        if self.fechafin and self.fechafin > date(2026, 1, 31):
+            raise ValidationError("error de fecha")
 
 
 class ProductoAcademico(models.Model):
@@ -85,6 +110,11 @@ class ProductoLaboral(models.Model):
 
     class Meta:
         db_table = 'PRODUCTOSLABORALES'
+
+    def clean(self):
+        """Validar fecha del producto laboral."""
+        if self.fechaproducto and self.fechaproducto > date(2026, 1, 31):
+            raise ValidationError("error de fecha")
 
 
 class VentaGarage(models.Model):

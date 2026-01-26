@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imprimir CV - {{ perfil.nombres }} {{ perfil.apellidos }}</title>
+    {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .print-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        /* HEADER PREMIUM */
+        .print-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .print-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 30px); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .print-header h1 {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .print-header p {
+            font-size: 1.3em;
+            font-weight: 300;
+            opacity: 0.95;
+            margin-bottom: 20px;
+        }
+
+        .print-date {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        /* CONTENIDO PRINCIPAL */
+        .print-content {
+            padding: 50px 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+
+        /* ITEMS */
+        .item {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .item:hover {
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .item-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-subtitle {
+            font-size: 0.95em;
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .item-date {
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .item-description {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* SKILLS */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .skill-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 25px;
+            text-align: center;
+            font-size: 0.9em;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* FOOTER */
+        .print-footer {
+            background: #f8f9fa;
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 2px solid #e9ecef;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* BOTONES */
+        .action-buttons {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 0 10px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-print {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-close {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .btn-close:hover {
+            background: #dee2e6;
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            html, body {
+                background: white;
+                padding: 0;
+            }
+
+            .print-container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .action-buttons {
+                display: none;
+            }
+
+            .print-header {
+                page-break-after: avoid;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+
+            .item {
+                page-break-inside: avoid;
+            }
+
+            body {
+                color: #000;
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .print-header h1 {
+                font-size: 2em;
+            }
+
+            .print-header p {
+                font-size: 1.1em;
+            }
+
+            .print-content {
+                padding: 30px 20px;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="print-container">
+        <!-- HEADER -->
+        <div class="print-header">
+            <div class="header-content">
+                <h1>{{ perfil.nombres }} {{ perfil.apellidos }}</h1>
+                {% if perfil.descripcionperfil %}
+                    <p>{{ perfil.descripcionperfil }}</p>
+                {% endif %}
+                <div class="print-date">{{ now|date:"d \d\e F \d\e Y" }}</div>
+            </div>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="action-buttons" style="padding-top: 30px;">
+            <button class="btn btn-print" onclick="window.print()">
+                🖨️ Imprimir / Guardar como PDF
+            </button>
+            <button class="btn btn-close" onclick="window.close()">
+                ✕ Cerrar
+            </button>
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="print-content">
+            
+            <!-- INFORMACIÓN PERSONAL -->
+            {% if perfil.nacionalidad or perfil.sexo or perfil.estadocivil %}
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">👤</span> Información Personal
+                </h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; font-size: 0.95em;">
+                    {% if perfil.nacionalidad %}<div><strong>Nacionalidad:</strong> {{ perfil.nacionalidad }}</div>{% endif %}
+                    {% if perfil.sexo %}<div><strong>Género:</strong> {{ perfil.sexo }}</div>{% endif %}
+                    {% if perfil.estadocivil %}<div><strong>Estado Civil:</strong> {{ perfil.estadocivil }}</div>{% endif %}
+                    {% if perfil.sitioweb %}<div><strong>Sitio Web:</strong> <a href="{{ perfil.sitioweb }}" target="_blank">{{ perfil.sitioweb }}</a></div>{% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- EXPERIENCIA LABORAL -->
+            {% if experiencias_qs.exists %}
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">💼</span> Experiencia Laboral
+                </h2>
+                {% for exp in experiencias_qs %}
+                <div class="item">
+                    <div class="item-title">{{ exp.cargodesempenado }}</div>
+                    <div class="item-subtitle">{{ exp.nombrempresa }}</div>
+                    {% if exp.fechainiciogestion or exp.fechafingestion %}
+                    <div class="item-date">
+                        {% if exp.fechainiciogestion %}{{ exp.fechainiciogestion|date:"F Y" }}{% endif %}
+                        {% if exp.fechafingestion %} — {{ exp.fechafingestion|date:"F Y" }}{% else %} — Presente{% endif %}
+                    </div>
+                    {% endif %}
+                    {% if exp.descripcionfunciones %}
+                    <div class="item-description">{{ exp.descripcionfunciones }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- FORMACIÓN ACADÉMICA -->
+            {% if cursos_qs.exists %}
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">🎓</span> Formación Académica
+                </h2>
+                {% for curso in cursos_qs %}
+                <div class="item">
+                    <div class="item-title">{{ curso.nombrecurso }}</div>
+                    {% if curso.entidadpatrocinadora %}
+                    <div class="item-subtitle">{{ curso.entidadpatrocinadora }}</div>
+                    {% endif %}
+                    {% if curso.fechainicio or curso.fechafin %}
+                    <div class="item-date">
+                        {% if curso.fechainicio %}{{ curso.fechainicio|date:"F Y" }}{% endif %}
+                        {% if curso.fechafin %} — {{ curso.fechafin|date:"F Y" }}{% endif %}
+                    </div>
+                    {% endif %}
+                    {% if curso.descripcioncurso %}
+                    <div class="item-description">{{ curso.descripcioncurso }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- RECONOCIMIENTOS -->
+            {% if reconocimientos_qs.exists %}
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">⭐</span> Reconocimientos
+                </h2>
+                {% for recon in reconocimientos_qs %}
+                <div class="item">
+                    <div class="item-title">{{ recon.tiporeconocimiento }}</div>
+                    {% if recon.entidadpatrocinadora %}
+                    <div class="item-subtitle">{{ recon.entidadpatrocinadora }}</div>
+                    {% endif %}
+                    {% if recon.fechareconocimiento %}
+                    <div class="item-date">{{ recon.fechareconocimiento|date:"F Y" }}</div>
+                    {% endif %}
+                    {% if recon.descripcionreconocimiento %}
+                    <div class="item-description">{{ recon.descripcionreconocimiento }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- PRODUCTOS ACADÉMICOS -->
+            {% if productos_academicos_qs.exists %}
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">📚</span> Productos Académicos
+                </h2>
+                {% for prod in productos_academicos_qs %}
+                <div class="item">
+                    <div class="item-title">{{ prod.nombrerecurso }}</div>
+                    {% if prod.clasificador %}
+                    <div class="item-subtitle">{{ prod.clasificador }}</div>
+                    {% endif %}
+                    {% if prod.descripcion %}
+                    <div class="item-description">{{ prod.descripcion }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- PRODUCTOS LABORALES -->
+            {% if productos_laborales_qs.exists %}
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">🔧</span> Productos Laborales
+                </h2>
+                {% for prod in productos_laborales_qs %}
+                <div class="item">
+                    <div class="item-title">{{ prod.nombreproducto }}</div>
+                    {% if prod.fechaproducto %}
+                    <div class="item-date">{{ prod.fechaproducto|date:"F Y" }}</div>
+                    {% endif %}
+                    {% if prod.descripcion %}
+                    <div class="item-description">{{ prod.descripcion }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="print-footer">
+            <p>📄 Documento generado automáticamente | {{ now|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
+</body>
+</html>

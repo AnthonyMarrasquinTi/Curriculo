@@ -16,6 +16,14 @@ from .services.azure_storage import upload_pdf
 class ExperienciaLaboralAdmin(admin.ModelAdmin):
     list_display = ('cargodesempenado', 'activarparaqueseveaenfront')
 
+    def save_model(self, request, obj, form, change):
+        try:
+            obj.full_clean()
+        except Exception as e:
+            messages.error(request, str(e))
+            return
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(Reconocimiento)
 class ReconocimientoAdmin(admin.ModelAdmin):
@@ -23,6 +31,11 @@ class ReconocimientoAdmin(admin.ModelAdmin):
     list_display = ('descripcionreconocimiento', 'activarparaqueseveaenfront')
 
     def save_model(self, request, obj, form, change):
+        try:
+            obj.full_clean()
+        except Exception as e:
+            messages.error(request, str(e))
+            return
         # If a file was uploaded, send to Azure and save URL
         uploaded = form.cleaned_data.get('certificado_subir')
         if uploaded:
@@ -37,6 +50,11 @@ class CursoRealizadoAdmin(admin.ModelAdmin):
     list_display = ('nombrecurso', 'activarparaqueseveaenfront')
 
     def save_model(self, request, obj, form, change):
+        try:
+            obj.full_clean()
+        except Exception as e:
+            messages.error(request, str(e))
+            return
         uploaded = form.cleaned_data.get('certificado_subir')
         if uploaded:
             try:
@@ -55,6 +73,14 @@ class ProductoAcademicoAdmin(admin.ModelAdmin):
 @admin.register(ProductoLaboral)
 class ProductoLaboralAdmin(admin.ModelAdmin):
     list_display = ('nombreproducto', 'activarparaqueseveaenfront')
+
+    def save_model(self, request, obj, form, change):
+        try:
+            obj.full_clean()
+        except Exception as e:
+            messages.error(request, str(e))
+            return
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(VentaGarage)

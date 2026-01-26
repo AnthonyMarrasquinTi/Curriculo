@@ -1,7 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import DatosPersonales
+from .models import DatosPersonales, VisibilidadSecciones
 
 from apps.documentos.services.azure_storage import upload_profile_image
 
@@ -32,6 +32,22 @@ class DatosPersonalesAdmin(admin.ModelAdmin):
     form = DatosPersonalesAdminForm
     list_display = ('apellidos', 'nombres', 'numerocedula', 'perfilactivo')
 
+    fieldsets = (
+        ('Información Personal', {
+            'fields': ('nombres', 'apellidos', 'descripcionperfil', 'numerocedula', 'sexo', 'estadocivil', 'perfilactivo')
+        }),
+        ('Datos de Nacimiento', {
+            'fields': ('fechanacimiento', 'nacionalidad', 'lugarnacimiento', 'licenciaconducir')
+        }),
+        ('Contacto', {
+            'fields': ('telefonofijo', 'telefonoconvencional', 'sitioweb', 'direcciondomiciliaria', 'direcciontrabajo')
+        }),
+        ('Foto de Perfil', {
+            'fields': ('foto_perfil_file',),
+            'description': 'Sube una imagen PNG para tu perfil (se almacenará en Azure)'
+        }),
+    )
+
     class Media:
         css = {
             'all': ('perfil/css/cyberadmin.css',)
@@ -39,6 +55,13 @@ class DatosPersonalesAdmin(admin.ModelAdmin):
         js = ('perfil/js/cyberadmin.js',)
 
     def save_model(self, request, obj, form, change):
+        # Validar fechas
+        try:
+            obj.full_clean()
+        except ValidationError as e:
+            messages.error(request, str(e))
+            return
+        
         # If a PNG was uploaded via the admin form, upload to Azure and store URL
         f = form.cleaned_data.get('foto_perfil_file') if hasattr(form, 'cleaned_data') else None
         if f:
@@ -50,6 +73,27 @@ class DatosPersonalesAdmin(admin.ModelAdmin):
                 raise ValidationError(f'Error subiendo la imagen a Azure: {exc}')
 
         super().save_model(request, obj, form, change)
+
+
+@admin.register(VisibilidadSecciones)
+class VisibilidadSeccionesAdmin(admin.ModelAdmin):
+    list_display = ('perfil',)
+    readonly_fields = ('perfil',)
+    
+    fieldsets = (
+        ('Checkboxes', {
+            'fields': (
+                'mostrar_experiencia_laboral',
+                'mostrar_educacion_cursos',
+                'mostrar_reconocimientos',
+                'mostrar_productos_academicos',
+                'mostrar_productos_laborales',
+                'mostrar_venta_garage'
+            ),
+            'description': 'Marca las secciones que deseas mostrar en tu CV'
+        }),
+    )
+
 
 # Global admin branding
 admin.site.site_header = "CYBERADMIN — Panel"

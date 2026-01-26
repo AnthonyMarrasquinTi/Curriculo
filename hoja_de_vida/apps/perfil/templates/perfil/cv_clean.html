@@ -22,8 +22,11 @@
                     {% endif %}
                 </div>
                 <div class="header-right no-print">
+                    <a href="{% url 'marketplace' %}" class="btn-admin">
+                        <span class="admin-icon">🎁</span> Marketplace
+                    </a>
                     <a href="{% url 'admin:index' %}" class="btn-admin">
-                        <span class="admin-icon">⚙</span> Admin
+                        <span class="admin-icon">⚙️</span> Admin
                     </a>
                 </div>
             </div>
@@ -34,10 +37,10 @@
             <!-- LEFT COLUMN (MAIN CONTENT - 68%) -->
             <div class="cv-main">
                 <!-- EXPERIENCIA LABORAL -->
-                {% if experiencias_qs.exists %}
+                {% if experiencias_qs.exists and perfil.visibilidad_secciones.mostrar_experiencia_laboral %}
                     <section class="main-section">
                         <div class="section-header">
-                            <div class="section-icon">💼</div>
+                            <div class="section-icon">💪</div>
                             <h2 class="section-title">Experiencia Laboral</h2>
                         </div>
                         <div class="section-content">
@@ -59,7 +62,7 @@
                                                 </div>
                                                 
                                                 {% if exp.lugarempresa %}
-                                                    <p class="location-tag">📍 {{ exp.lugarempresa }}</p>
+                                                    <p class="location-tag">🗺️ {{ exp.lugarempresa }}</p>
                                                 {% endif %}
                                                 
                                                 {% if exp.descripcionfunciones %}
@@ -70,25 +73,25 @@
                                                     <div class="contact-grid">
                                                         {% if exp.emailempresa %}
                                                             <div class="contact-item">
-                                                                <span class="contact-icon">✉️</span>
+                                                                <span class="contact-icon">�</span>
                                                                 <span class="contact-text">{{ exp.emailempresa }}</span>
                                                             </div>
                                                         {% endif %}
                                                         {% if exp.sitiowebempresa %}
                                                             <div class="contact-item">
-                                                                <span class="contact-icon">🌐</span>
+                                                                <span class="contact-icon">🌟</span>
                                                                 <a href="{{ exp.sitiowebempresa }}" target="_blank" class="contact-link">{{ exp.sitiowebempresa }}</a>
                                                             </div>
                                                         {% endif %}
                                                         {% if exp.nombrecontactoempresarial %}
                                                             <div class="contact-item">
-                                                                <span class="contact-icon">👤</span>
+                                                                <span class="contact-icon">�‍💼</span>
                                                                 <span class="contact-text">{{ exp.nombrecontactoempresarial }}</span>
                                                             </div>
                                                         {% endif %}
                                                         {% if exp.telefonocontactoempresarial %}
                                                             <div class="contact-item">
-                                                                <span class="contact-icon">📞</span>
+                                                                <span class="contact-icon">📱</span>
                                                                 <span class="contact-text">{{ exp.telefonocontactoempresarial }}</span>
                                                             </div>
                                                         {% endif %}
@@ -98,10 +101,10 @@
                                                 {% if exp.rutacertificado %}
                                                     <div class="cert-actions">
                                                         <a class="btn-cert primary" href="{% url 'ver_certificado_experiencia' exp.pk %}" target="_blank">
-                                                            <span class="btn-icon">👁</span> Ver certificado
+                                                            <span class="btn-icon">🔍</span> Ver certificado
                                                         </a>
                                                         <a class="btn-cert secondary" href="{% url 'ver_certificado_experiencia' exp.pk %}?download=1">
-                                                            <span class="btn-icon">⬇</span> Descargar
+                                                            <span class="btn-icon">💾</span> Descargar
                                                         </a>
                                                     </div>
                                                 {% endif %}
@@ -115,7 +118,7 @@
                 {% endif %}
 
                 <!-- EDUCACIÓN Y CURSOS -->
-                {% if cursos.exists %}
+                {% if cursos.exists and perfil.visibilidad_secciones.mostrar_educacion_cursos %}
                     <section class="main-section">
                         <div class="section-header">
                             <div class="section-icon">🎓</div>
@@ -142,7 +145,7 @@
                                             {% endif %}
                                             
                                             {% if curso.totalhoras %}
-                                                <p class="hours-badge">⏱ {{ curso.totalhoras }} horas</p>
+                                                <p class="hours-badge">🕐 {{ curso.totalhoras }} horas</p>
                                             {% endif %}
                                             
                                             {% if curso.descripcioncurso %}
@@ -153,19 +156,19 @@
                                                 <div class="contact-grid">
                                                     {% if curso.nombrecontactoauspicia %}
                                                         <div class="contact-item">
-                                                            <span class="contact-icon">👤</span>
+                                                            <span class="contact-icon">🧑</span>
                                                             <span class="contact-text">{{ curso.nombrecontactoauspicia }}</span>
                                                         </div>
                                                     {% endif %}
                                                     {% if curso.telefonocontactoauspicia %}
                                                         <div class="contact-item">
-                                                            <span class="contact-icon">📞</span>
+                                                            <span class="contact-icon">☎️</span>
                                                             <span class="contact-text">{{ curso.telefonocontactoauspicia }}</span>
                                                         </div>
                                                     {% endif %}
                                                     {% if curso.emailempresapatrocinadora %}
                                                         <div class="contact-item">
-                                                            <span class="contact-icon">✉️</span>
+                                                            <span class="contact-icon">📬</span>
                                                             <span class="contact-text">{{ curso.emailempresapatrocinadora }}</span>
                                                         </div>
                                                     {% endif %}
@@ -175,10 +178,10 @@
                                             {% if curso.rutacertificado %}
                                                 <div class="cert-actions">
                                                     <a class="btn-cert primary" href="{% url 'ver_certificado_curso' curso.pk %}" target="_blank">
-                                                        <span class="btn-icon">👁</span> Ver certificado
+                                                        <span class="btn-icon">🔎</span> Ver certificado
                                                     </a>
                                                     <a class="btn-cert secondary" href="{% url 'ver_certificado_curso' curso.pk %}?download=1">
-                                                        <span class="btn-icon">⬇</span> Descargar
+                                                        <span class="btn-icon">💿</span> Descargar
                                                     </a>
                                                 </div>
                                             {% endif %}
@@ -191,10 +194,10 @@
                 {% endif %}
 
                 <!-- RECONOCIMIENTOS -->
-                {% if reconocimientos.exists %}
+                {% if reconocimientos.exists and perfil.visibilidad_secciones.mostrar_reconocimientos %}
                     <section class="main-section">
                         <div class="section-header">
-                            <div class="section-icon">🏆</div>
+                            <div class="section-icon">🏅</div>
                             <h2 class="section-title">Reconocimientos</h2>
                         </div>
                         <div class="section-content">
@@ -221,13 +224,13 @@
                                         <div class="contact-grid compact">
                                             {% if recon.nombrecontactoauspicia %}
                                                 <div class="contact-item">
-                                                    <span class="contact-icon">👤</span>
+                                                    <span class="contact-icon">🤝</span>
                                                     <span class="contact-text">{{ recon.nombrecontactoauspicia }}</span>
                                                 </div>
                                             {% endif %}
                                             {% if recon.telefonocontactoauspicia %}
                                                 <div class="contact-item">
-                                                    <span class="contact-icon">📞</span>
+                                                    <span class="contact-icon">📟</span>
                                                     <span class="contact-text">{{ recon.telefonocontactoauspicia }}</span>
                                                 </div>
                                             {% endif %}
@@ -237,10 +240,10 @@
                                     {% if recon.rutacertificado %}
                                         <div class="cert-actions">
                                             <a class="btn-cert primary" href="{% url 'ver_certificado_reconocimiento' recon.pk %}" target="_blank">
-                                                <span class="btn-icon">👁</span> Ver certificado
+                                                <span class="btn-icon">🔏</span> Ver certificado
                                             </a>
                                             <a class="btn-cert secondary" href="{% url 'ver_certificado_reconocimiento' recon.pk %}?download=1">
-                                                <span class="btn-icon">⬇</span> Descargar
+                                                <span class="btn-icon">📀</span> Descargar
                                             </a>
                                         </div>
                                     {% endif %}
@@ -251,7 +254,7 @@
                 {% endif %}
 
                 <!-- PRODUCTOS ACADÉMICOS -->
-                {% if productos_academicos.exists %}
+                {% if productos_academicos.exists and perfil.visibilidad_secciones.mostrar_productos_academicos %}
                     <section class="main-section">
                         <div class="section-header">
                             <div class="section-icon">📚</div>
@@ -276,10 +279,10 @@
                 {% endif %}
 
                 <!-- PRODUCTOS LABORALES -->
-                {% if productos_laborales.exists %}
+                {% if productos_laborales.exists and perfil.visibilidad_secciones.mostrar_productos_laborales %}
                     <section class="main-section">
                         <div class="section-header">
-                            <div class="section-icon">🔧</div>
+                            <div class="section-icon">🛠️</div>
                             <h2 class="section-title">Productos Laborales</h2>
                         </div>
                         <div class="section-content">
@@ -289,7 +292,7 @@
                                         <h4 class="product-title">{{ prod.nombreproducto }}</h4>
                                     {% endif %}
                                     {% if prod.fechaproducto %}
-                                        <span class="product-date">📅 {{ prod.fechaproducto|date:"d/m/Y" }}</span>
+                                        <span class="product-date">� {{ prod.fechaproducto|date:"d/m/Y" }}</span>
                                     {% endif %}
                                     {% if prod.descripcion %}
                                         <p class="description-text">{{ prod.descripcion }}</p>
@@ -301,10 +304,10 @@
                 {% endif %}
 
                 <!-- VENTA GARAGE -->
-                {% if ventas_garage.exists %}
+                {% if ventas_garage.exists and perfil.visibilidad_secciones.mostrar_venta_garage %}
                     <section class="main-section">
                         <div class="section-header">
-                            <div class="section-icon">🏪</div>
+                            <div class="section-icon">🎪</div>
                             <h2 class="section-title">Venta Garage</h2>
                         </div>
                         <div class="section-content">
@@ -401,31 +404,31 @@
                     <div class="sidebar-content">
                         {% if perfil.telefonofijo %}
                             <div class="info-item icon">
-                                <span class="icon-label">📞</span>
+                                <span class="icon-label">�</span>
                                 <span class="info-value">{{ perfil.telefonofijo }}</span>
                             </div>
                         {% endif %}
                         {% if perfil.telefonoconvencional %}
                             <div class="info-item icon">
-                                <span class="icon-label">📱</span>
+                                <span class="icon-label">📞</span>
                                 <span class="info-value">{{ perfil.telefonoconvencional }}</span>
                             </div>
                         {% endif %}
                         {% if perfil.sitioweb %}
                             <div class="info-item icon">
-                                <span class="icon-label">🌐</span>
+                                <span class="icon-label">🌍</span>
                                 <a href="{{ perfil.sitioweb }}" target="_blank" class="info-link">{{ perfil.sitioweb }}</a>
                             </div>
                         {% endif %}
                         {% if perfil.direcciondomiciliaria %}
                             <div class="info-item icon">
-                                <span class="icon-label">🏠</span>
+                                <span class="icon-label">🏡</span>
                                 <span class="info-value">{{ perfil.direcciondomiciliaria }}</span>
                             </div>
                         {% endif %}
                         {% if perfil.direcciontrabajo %}
                             <div class="info-item icon">
-                                <span class="icon-label">🏢</span>
+                                <span class="icon-label">🏛️</span>
                                 <span class="info-value">{{ perfil.direcciontrabajo }}</span>
                             </div>
                         {% endif %}
@@ -475,11 +478,14 @@
 
     <!-- Botones de acción (solo al final) -->
     <div class="action-buttons">
-        <button class="btn-action outline" onclick="window.print()">
-            <span class="btn-icon">🖨️</span> Imprimir PDF
+        <button class="btn-action outline" onclick="window.print()" style="display: none;">
+            <span class="btn-icon">�️</span> Imprimir PDF
         </button>
         <a class="btn-action primary" href="{% url 'descargar_cv_completo_pdf' %}?check_all=1">
-            <span class="btn-icon">📦</span> Check All
+            <span class="btn-icon">📋</span> Check All
+        </a>
+        <a class="btn-action primary" href="{% url 'seleccionar_secciones_cv' %}">
+            <span class="btn-icon">📊</span> Descargar CV
         </a>
     </div>
 </body>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Descargar CV Personalizado</title>
+    <style>
+        body {
+            background-color: #4a90e2;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            background-color: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        p {
+            margin: 12px 0;
+        }
+        
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+        
+        button {
+            margin-right: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+        }
+        
+        button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h2>Descargar CV Personalizado</h2>
+    
+    <p><strong>Selecciona qué secciones quieres incluir:</strong></p>
+    
+    <form method="GET" action="{% url 'descargar_cv_personalizado' %}">
+        <p>
+            <label>
+                {% if tiene_experiencias %}
+                    <input type="checkbox" name="experiencia" value="on">
+                    Experiencia Laboral
+                {% else %}
+                    <input type="checkbox" name="experiencia" value="on" disabled>
+                    Experiencia Laboral <em>(sin datos)</em>
+                {% endif %}
+            </label>
+        </p>
+        
+        <p>
+            <label>
+                {% if tiene_cursos %}
+                    <input type="checkbox" name="cursos" value="on">
+                    Formación Académica
+                {% else %}
+                    <input type="checkbox" name="cursos" value="on" disabled>
+                    Formación Académica <em>(sin datos)</em>
+                {% endif %}
+            </label>
+        </p>
+        
+        <p>
+            <label>
+                {% if tiene_reconocimientos %}
+                    <input type="checkbox" name="reconocimientos" value="on">
+                    Reconocimientos
+                {% else %}
+                    <input type="checkbox" name="reconocimientos" value="on" disabled>
+                    Reconocimientos <em>(sin datos)</em>
+                {% endif %}
+            </label>
+        </p>
+        
+        <p>
+            <label>
+                {% if tiene_productos_academicos %}
+                    <input type="checkbox" name="productos_academicos" value="on">
+                    Productos Académicos
+                {% else %}
+                    <input type="checkbox" name="productos_academicos" value="on" disabled>
+                    Productos Académicos <em>(sin datos)</em>
+                {% endif %}
+            </label>
+        </p>
+        
+        <p>
+            <label>
+                {% if tiene_productos_laborales %}
+                    <input type="checkbox" name="productos_laborales" value="on">
+                    Productos Laborales
+                {% else %}
+                    <input type="checkbox" name="productos_laborales" value="on" disabled>
+                    Productos Laborales <em>(sin datos)</em>
+                {% endif %}
+            </label>
+        </p>
+        
+        <p>
+            <label>
+                {% if tiene_ventas %}
+                    <input type="checkbox" name="ventas" value="on">
+                    Ventas Garage
+                {% else %}
+                    <input type="checkbox" name="ventas" value="on" disabled>
+                    Ventas Garage <em>(sin datos)</em>
+                {% endif %}
+            </label>
+        </p>
+        
+        <br>
+        <button type="submit">Descargar</button>
+        <button type="button" onclick="history.back()">Cancelar</button>
+    </form>
+    </div>
+</body>
+</html>
+

@@ -1,4 +1,8 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+from datetime import date
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class DatosPersonales(models.Model):
@@ -36,3 +40,36 @@ class DatosPersonales(models.Model):
 
     class Meta:
         db_table = 'DATOSPERSONALES'
+
+    def clean(self):
+        """Validar fecha de nacimiento."""
+        if self.fechanacimiento and self.fechanacimiento > date(2009, 12, 31):
+            raise ValidationError("error de fecha")
+
+
+class VisibilidadSecciones(models.Model):
+    """Controla qué secciones del CV se muestran en la web"""
+    idvisibilidad = models.AutoField(primary_key=True, db_column='idvisibilidad')
+    perfil = models.OneToOneField(DatosPersonales, on_delete=models.CASCADE, db_column='idperfil', related_name='visibilidad_secciones')
+    
+    mostrar_experiencia_laboral = models.BooleanField(default=True, db_column='mostrar_experiencia_laboral')
+    mostrar_educacion_cursos = models.BooleanField(default=True, db_column='mostrar_educacion_cursos')
+    mostrar_reconocimientos = models.BooleanField(default=True, db_column='mostrar_reconocimientos')
+    mostrar_productos_academicos = models.BooleanField(default=True, db_column='mostrar_productos_academicos')
+    mostrar_productos_laborales = models.BooleanField(default=True, db_column='mostrar_productos_laborales')
+    mostrar_venta_garage = models.BooleanField(default=True, db_column='mostrar_venta_garage')
+
+    class Meta:
+        db_table = 'VISIBILIDADSECCIONES'
+        verbose_name = 'Check Box'
+        verbose_name_plural = 'Check Box'
+
+    def __str__(self):
+        return f"Visibilidad de secciones - {self.perfil.nombres} {self.perfil.apellidos}"
+
+# Señal para crear VisibilidadSecciones automáticamente cuando se crea un DatosPersonales
+@receiver(post_save, sender=DatosPersonales)
+def crear_visibilidad_secciones(sender, instance, created, **kwargs):
+    """Auto-crear VisibilidadSecciones para nuevos DatosPersonales"""
+    if created:
+        VisibilidadSecciones.objects.get_or_create(perfil=instance)
