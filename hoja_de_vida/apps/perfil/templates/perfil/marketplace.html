@@ -88,6 +88,30 @@
             text-transform: uppercase;
         }
         
+        .availability-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        
+        .availability-badge.sold {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .product-date {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
         .price-tag {
             display: inline-block;
             padding: 6px 12px;
@@ -166,6 +190,9 @@
                             {% if venta.estadoproducto %}
                                 <span class="status-badge">{{ venta.estadoproducto }}</span>
                             {% endif %}
+                            {% if venta.disponibilidad %}
+                                <span class="availability-badge {% if venta.disponibilidad == 'Vendido' %}sold{% endif %}">{{ venta.disponibilidad }}</span>
+                            {% endif %}
                             {% if venta.valorbien %}
                                 <span class="price-tag">${{ venta.valorbien }}</span>
                             {% endif %}
@@ -173,6 +200,12 @@
                         
                         {% if venta.descripcion %}
                             <p class="product-description">{{ venta.descripcion }}</p>
+                        {% endif %}
+                        
+                        {% if venta.fecha_publicacion %}
+                            <div class="product-date">
+                                📅 Publicado: {{ venta.fecha_publicacion|date:"d/m/Y" }}
+                            </div>
                         {% endif %}
                     </div>
                 {% endfor %}

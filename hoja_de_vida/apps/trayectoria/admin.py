@@ -85,5 +85,19 @@ class ProductoLaboralAdmin(admin.ModelAdmin):
 
 @admin.register(VentaGarage)
 class VentaGarageAdmin(admin.ModelAdmin):
-    list_display = ('nombreproducto', 'activarparaqueseveaenfront')
-    # No custom forms or inline configurations yet.
+    list_display = ('nombreproducto', 'fecha_publicacion', 'disponibilidad', 'activarparaqueseveaenfront')
+    
+    fieldsets = (
+        ('Información del Producto', {
+            'fields': ('idperfilconqueestaactivo', 'nombreproducto', 'estadoproducto', 'descripcion', 'valordelbien')
+        }),
+        ('Publicación', {
+            'fields': ('fecha_publicacion', 'disponibilidad', 'activarparaqueseveaenfront')
+        }),
+    )
+    
+    def clean(self):
+        """Validar fecha de publicación antes de guardar."""
+        super().clean()
+        if self.fecha_publicacion and self.fecha_publicacion > date(2026, 1, 31):
+            raise ValidationError("La fecha de publicación no puede ser mayor a 2026-01-31")

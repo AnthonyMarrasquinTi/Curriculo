@@ -130,6 +130,18 @@ class VentaGarage(models.Model):
     descripcion = models.CharField(max_length=100, db_column='descripcion', null=True, blank=True)
     valordelbien = models.DecimalField(max_digits=5, decimal_places=2, db_column='valordelbien', null=True, blank=True)
     activarparaqueseveaenfront = models.BooleanField(default=True, db_column='activarparaqueseveaenfront')
+    fecha_publicacion = models.DateField(db_column='fecha_publicacion', null=True, blank=True)
+    
+    DISPONIBILIDAD_CHOICES = [
+        ('Disponible', 'Disponible'),
+        ('Vendido', 'Vendido'),
+    ]
+    disponibilidad = models.CharField(max_length=20, choices=DISPONIBILIDAD_CHOICES, default='Disponible', db_column='disponibilidad')
 
     class Meta:
         db_table = 'VENTAGARAGE'
+
+    def clean(self):
+        """Validar fecha de publicación."""
+        if self.fecha_publicacion and self.fecha_publicacion > date(2026, 1, 31):
+            raise ValidationError("La fecha de publicación no puede ser mayor a 2026-01-31")
