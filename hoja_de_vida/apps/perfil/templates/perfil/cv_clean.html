@@ -9,9 +9,50 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'perfil/css/cv_clean.css' %}">
+    <style>
+        /* Sidebar and section visibility controls */
+        .main-section { display: none; }
+        #cv-sidebar {
+            position: fixed;
+            top: 0;
+            left: -260px;
+            width: 260px;
+            height: 100%;
+            background: #ffffff;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.12);
+            transition: left 0.28s ease;
+            z-index: 1200;
+            padding: 20px;
+        }
+        #cv-sidebar.open { left: 0; }
+        #cv-sidebar h3 { margin-top: 0; font-size: 18px; }
+        .cv-section-btn { display: block; width: 100%; margin: 8px 0; padding: 10px 12px; border: none; background: #f3f4f6; cursor: pointer; text-align: left; border-radius: 6px; }
+        .cv-section-btn:hover { background: #e5e7eb; }
+        #menu-toggle { background: none; border: none; padding: 8px 12px; font-size: 20px; cursor: pointer; }
+    </style>
 </head>
 <body>
     <div class="cv-page">
+        <!-- Floating CV sidebar (global toggle) -->
+        <aside id="cv-sidebar" aria-hidden="true">
+            <h3>Secciones</h3>
+            <button id="sidebar-close" class="cv-section-btn" onclick="document.getElementById('cv-sidebar').classList.remove('open')">Cerrar ✕</button>
+            {% if experiencias_qs.exists and perfil.visibilidad_secciones.mostrar_experiencia_laboral %}
+                <button class="cv-section-btn" data-section="experiencia">Experiencia Laboral</button>
+            {% endif %}
+            {% if cursos.exists and perfil.visibilidad_secciones.mostrar_educacion_cursos %}
+                <button class="cv-section-btn" data-section="educacion">Educación y Cursos</button>
+            {% endif %}
+            {% if reconocimientos.exists and perfil.visibilidad_secciones.mostrar_reconocimientos %}
+                <button class="cv-section-btn" data-section="reconocimientos">Reconocimientos</button>
+            {% endif %}
+            {% if productos_laborales.exists and perfil.visibilidad_secciones.mostrar_productos_laborales %}
+                <button class="cv-section-btn" data-section="productos_laborales">Productos Laborales</button>
+            {% endif %}
+            {% if productos_academicos.exists and perfil.visibilidad_secciones.mostrar_productos_academicos %}
+                <button class="cv-section-btn" data-section="productos_academicos">Productos Académicos</button>
+            {% endif %}
+        </aside>
         <!-- HEADER PREMIUM -->
         <div class="cv-header">
             <div class="header-content">
@@ -22,6 +63,7 @@
                     {% endif %}
                 </div>
                 <div class="header-right no-print">
+                    <button id="menu-toggle" class="btn-admin" aria-label="Abrir menú">☰</button>
                     <a href="{% url 'marketplace' %}" class="btn-admin">
                         <span class="admin-icon">🎁</span> Marketplace
                     </a>
@@ -37,8 +79,8 @@
             <!-- LEFT COLUMN (MAIN CONTENT - 68%) -->
             <div class="cv-main">
                 <!-- EXPERIENCIA LABORAL -->
-                {% if experiencias_qs.exists and perfil.visibilidad_secciones.mostrar_experiencia_laboral %}
-                    <section class="main-section">
+                    {% if experiencias_qs.exists and perfil.visibilidad_secciones.mostrar_experiencia_laboral %}
+                        <section id="experiencia" class="main-section">
                         <div class="section-header">
                             <div class="section-icon">💪</div>
                             <h2 class="section-title">Experiencia Laboral</h2>
@@ -119,7 +161,7 @@
 
                 <!-- EDUCACIÓN Y CURSOS -->
                 {% if cursos.exists and perfil.visibilidad_secciones.mostrar_educacion_cursos %}
-                    <section class="main-section">
+                    <section id="educacion" class="main-section">
                         <div class="section-header">
                             <div class="section-icon">🎓</div>
                             <h2 class="section-title">Educación y Cursos</h2>
@@ -195,7 +237,7 @@
 
                 <!-- RECONOCIMIENTOS -->
                 {% if reconocimientos.exists and perfil.visibilidad_secciones.mostrar_reconocimientos %}
-                    <section class="main-section">
+                    <section id="reconocimientos" class="main-section">
                         <div class="section-header">
                             <div class="section-icon">🏅</div>
                             <h2 class="section-title">Reconocimientos</h2>
@@ -255,7 +297,7 @@
 
                 <!-- PRODUCTOS ACADÉMICOS -->
                 {% if productos_academicos.exists and perfil.visibilidad_secciones.mostrar_productos_academicos %}
-                    <section class="main-section">
+                    <section id="productos_academicos" class="main-section">
                         <div class="section-header">
                             <div class="section-icon">📚</div>
                             <h2 class="section-title">Productos Académicos</h2>
@@ -280,7 +322,7 @@
 
                 <!-- PRODUCTOS LABORALES -->
                 {% if productos_laborales.exists and perfil.visibilidad_secciones.mostrar_productos_laborales %}
-                    <section class="main-section">
+                    <section id="productos_laborales" class="main-section">
                         <div class="section-header">
                             <div class="section-icon">🛠️</div>
                             <h2 class="section-title">Productos Laborales</h2>
@@ -305,7 +347,7 @@
 
                 <!-- VENTA GARAGE -->
                 {% if ventas_garage.exists and perfil.visibilidad_secciones.mostrar_venta_garage %}
-                    <section class="main-section">
+                    <section id="venta_garage" class="main-section">
                         <div class="section-header">
                             <div class="section-icon">🎪</div>
                             <h2 class="section-title">Venta Garage</h2>
@@ -489,4 +531,48 @@
         </a>
     </div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('cv-sidebar');
+        const toggle = document.getElementById('menu-toggle');
+        const sectionButtons = document.querySelectorAll('.cv-section-btn');
+
+        if (toggle) {
+            toggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                sidebar.classList.toggle('open');
+            });
+        }
+
+        function hideAllSections() {
+            document.querySelectorAll('.main-section').forEach(function (el) {
+                el.style.display = 'none';
+            });
+        }
+
+        // Show only experiencia on load
+        hideAllSections();
+        const experiencia = document.getElementById('experiencia');
+        if (experiencia) experiencia.style.display = 'block';
+
+        sectionButtons.forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const section = btn.getAttribute('data-section');
+                if (!section) return;
+                hideAllSections();
+                const target = document.getElementById(section);
+                if (target) target.style.display = 'block';
+                sidebar.classList.remove('open');
+            });
+        });
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+    });
+</script>
 </html>
