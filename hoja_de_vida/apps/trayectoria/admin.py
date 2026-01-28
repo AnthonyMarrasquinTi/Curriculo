@@ -90,10 +90,11 @@ class ProductoLaboralAdmin(admin.ModelAdmin):
 class VentaGarageAdmin(admin.ModelAdmin):
     form = VentaGarageAdminForm
     list_display = ('nombreproducto', 'fecha_publicacion', 'disponibilidad', 'activarparaqueseveaenfront')
+    readonly_fields = ('rutaimagen',)
     
     fieldsets = (
         ('Información del Producto', {
-            'fields': ('idperfilconqueestaactivo', 'nombreproducto', 'estadoproducto', 'descripcion', 'valordelbien', 'rutaimagen')
+            'fields': ('idperfilconqueestaactivo', 'nombreproducto', 'estadoproducto', 'descripcion', 'valordelbien', 'rutaimagen', 'imagen_subir')
         }),
         ('Publicación', {
             'fields': ('fecha_publicacion', 'disponibilidad', 'activarparaqueseveaenfront')
