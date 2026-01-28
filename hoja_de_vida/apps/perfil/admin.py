@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from .models import DatosPersonales, VisibilidadSecciones
 
 from apps.documentos.services.azure_storage import upload_profile_image
+from apps.trayectoria.validators import validate_fecha_nacimiento
 
 
 class DatosPersonalesAdminForm(forms.ModelForm):
@@ -25,6 +26,16 @@ class DatosPersonalesAdminForm(forms.ModelForm):
             if content_type and content_type != 'image/png':
                 raise ValidationError('Solo se permiten imágenes PNG (content-type debe ser image/png)')
         return f
+
+    def clean(self):
+        cleaned = super().clean()
+        fechanac = cleaned.get('fechanacimiento')
+        if fechanac:
+            try:
+                validate_fecha_nacimiento(fechanac)
+            except Exception as exc:
+                raise ValidationError({'fechanacimiento': str(exc)})
+        return cleaned
 
 
 @admin.register(DatosPersonales)

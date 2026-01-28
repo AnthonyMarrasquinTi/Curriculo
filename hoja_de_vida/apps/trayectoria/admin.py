@@ -8,12 +8,14 @@ from .models import (
     ProductoLaboral,
     VentaGarage,
 )
-from .forms_admin import CursoRealizadoAdminForm, ReconocimientoAdminForm
-from .services.azure_storage import upload_pdf
+from .forms_admin import CursoRealizadoAdminForm, ReconocimientoAdminForm, ExperienciaLaboralAdminForm, ProductoLaboralAdminForm, VentaGarageAdminForm
+from .services.azure_storage import upload_pdf, upload_image
+from django.core.exceptions import ValidationError
 
 
 @admin.register(ExperienciaLaboral)
 class ExperienciaLaboralAdmin(admin.ModelAdmin):
+    form = ExperienciaLaboralAdminForm
     list_display = ('cargodesempenado', 'activarparaqueseveaenfront')
 
     def save_model(self, request, obj, form, change):
@@ -72,6 +74,7 @@ class ProductoAcademicoAdmin(admin.ModelAdmin):
 
 @admin.register(ProductoLaboral)
 class ProductoLaboralAdmin(admin.ModelAdmin):
+    form = ProductoLaboralAdminForm
     list_display = ('nombreproducto', 'activarparaqueseveaenfront')
 
     def save_model(self, request, obj, form, change):
@@ -85,19 +88,32 @@ class ProductoLaboralAdmin(admin.ModelAdmin):
 
 @admin.register(VentaGarage)
 class VentaGarageAdmin(admin.ModelAdmin):
+    form = VentaGarageAdminForm
     list_display = ('nombreproducto', 'fecha_publicacion', 'disponibilidad', 'activarparaqueseveaenfront')
     
     fieldsets = (
         ('Información del Producto', {
-            'fields': ('idperfilconqueestaactivo', 'nombreproducto', 'estadoproducto', 'descripcion', 'valordelbien')
+            'fields': ('idperfilconqueestaactivo', 'nombreproducto', 'estadoproducto', 'descripcion', 'valordelbien', 'rutaimagen')
         }),
         ('Publicación', {
             'fields': ('fecha_publicacion', 'disponibilidad', 'activarparaqueseveaenfront')
         }),
     )
-    
-    def clean(self):
-        """Validar fecha de publicación antes de guardar."""
-        super().clean()
-        if self.fecha_publicacion and self.fecha_publicacion > date(2026, 1, 31):
-            raise ValidationError("La fecha de publicación no puede ser mayor a 2026-01-31")
+
+    def save_model(self, request, obj, form, change):
+        try:
+            obj.full_clean()
+        except Exception as e:
+            messages.error(request, str(e))
+            return
+
+        uploaded = form.cleaned_data.get('imagen_subir')
+        if uploaded:
+            try:
+                url = upload_image(uploaded, filename=uploaded.name)
+                obj.rutaimagen = url
+            except Exception as exc:
+                messages.error(request, f'Error al subir imagen a Azure: {exc}')
+                return
+
+        super().save_model(request, obj, form, change)

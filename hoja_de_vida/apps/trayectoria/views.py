@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from azure.storage.blob import BlobServiceClient
 
 from .models import CursoRealizado, Reconocimiento, ExperienciaLaboral
+from .models import VentaGarage
 
 
 # Create your views here.
@@ -81,4 +82,21 @@ def ver_certificado_experiencia(request, experiencia_id):
         return _serve_pdf_response(data, filename, inline=not download)
     except Exception as exc:
         return HttpResponseServerError(f'Error al descargar el certificado: {exc}')
+
+
+def ver_imagen_venta_garage(request, venta_id):
+    venta = get_object_or_404(VentaGarage, pk=venta_id)
+    if not getattr(venta, 'rutaimagen', None):
+        return HttpResponse('No existe imagen para este producto.', status=404)
+
+    try:
+        data, filename = _download_blob_from_url(venta.rutaimagen)
+        # Try guess content-type by filename
+        import mimetypes
+        content_type = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+        resp = HttpResponse(data, content_type=content_type)
+        resp['Content-Disposition'] = f'inline; filename="{filename}"'
+        return resp
+    except Exception as exc:
+        return HttpResponseServerError(f'Error al descargar la imagen: {exc}')
 

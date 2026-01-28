@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from datetime import date
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -8,7 +9,7 @@ from django.dispatch import receiver
 class DatosPersonales(models.Model):
     idperfil = models.AutoField(primary_key=True, db_column='idperfil')
     descripcionperfil = models.CharField(max_length=50, db_column='descripcionperfil')
-    perfilactivo = models.IntegerField(db_column='perfilactivo')
+    perfilactivo = models.IntegerField(db_column='perfilactivo', validators=[MinValueValidator(0)])
     apellidos = models.CharField(max_length=60, db_column='apellidos')
     nombres = models.CharField(max_length=60, db_column='nombres')
     nacionalidad = models.CharField(max_length=20, db_column='nacionalidad')
@@ -42,9 +43,12 @@ class DatosPersonales(models.Model):
         db_table = 'DATOSPERSONALES'
 
     def clean(self):
-        """Validar fecha de nacimiento."""
-        if self.fechanacimiento and self.fechanacimiento > date(2009, 12, 31):
-            raise ValidationError("error de fecha")
+        """Validar fecha de nacimiento (entre 1981-01-01 y 2026-01-31)."""
+        if self.fechanacimiento:
+            earliest = date(1981, 1, 1)
+            latest = date(2026, 1, 31)
+            if self.fechanacimiento < earliest or self.fechanacimiento > latest:
+                raise ValidationError(f'Fecha de nacimiento fuera del rango permitido ({earliest} - {latest})')
 
 
 class VisibilidadSecciones(models.Model):

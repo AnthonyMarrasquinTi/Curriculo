@@ -48,3 +48,37 @@ def upload_pdf(file_obj, filename=None):
 
     # Construct URL
     return blob_client.url
+
+
+def upload_image(file_obj, filename=None, subfolder='venta_garage/'):
+    """Upload an image file to Azure Blob Storage and return the public URL.
+
+    Validates the file-like object and stores it under the provided subfolder inside the container.
+    """
+    import mimetypes
+
+    container_client = _get_container_client()
+
+    if filename:
+        base_name = filename
+    else:
+        base_name = getattr(file_obj, 'name', None) or 'image'
+
+    ext = os.path.splitext(base_name)[1] or '.png'
+    blob_name = f"{subfolder}{uuid.uuid4().hex}{ext}"
+
+    blob_client = container_client.get_blob_client(blob_name)
+
+    # determine content type
+    content_type = mimetypes.guess_type(base_name)[0] or 'application/octet-stream'
+
+    try:
+        if hasattr(file_obj, 'chunks'):
+            data = b''.join(chunk for chunk in file_obj.chunks())
+        else:
+            data = file_obj.read()
+        blob_client.upload_blob(data, overwrite=True, content_type=content_type)
+    except Exception as exc:
+        raise RuntimeError(f'Failed to upload image blob: {exc}')
+
+    return blob_client.url

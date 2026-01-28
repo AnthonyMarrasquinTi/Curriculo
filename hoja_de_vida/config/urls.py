@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from apps.perfil.views import hoja_vida_publica, descargar_cv_pdf, descargar_cv_completo_pdf, ver_foto_perfil, seleccionar_secciones_cv, descargar_cv_personalizado, marketplace
 from apps.trayectoria.views import ver_certificado_curso, ver_certificado_reconocimiento, ver_certificado_experiencia
+from apps.trayectoria.views import ver_imagen_venta_garage
 
 urlpatterns = [
     path('', hoja_vida_publica, name='hoja_vida_publica'),
@@ -31,6 +32,9 @@ urlpatterns = [
     path('certificados/curso/<int:curso_id>/', ver_certificado_curso, name='ver_certificado_curso'),
     path('certificados/reconocimiento/<int:reconocimiento_id>/', ver_certificado_reconocimiento, name='ver_certificado_reconocimiento'),
     path('certificados/experiencia/<int:experiencia_id>/', ver_certificado_experiencia, name='ver_certificado_experiencia'),
+
+    # Venta Garage image proxy
+    path('imagen-venta-garage/<int:venta_id>/', ver_imagen_venta_garage, name='ver_imagen_venta_garage'),
 
     # Secure profile photo endpoint
     path('foto-perfil/', ver_foto_perfil, name='ver_foto_perfil'),
