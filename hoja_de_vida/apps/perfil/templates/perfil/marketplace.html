@@ -240,8 +240,8 @@
                                 {% if venta.disponibilidad %}
                                     <span class="availability-badge {% if venta.disponibilidad == 'Vendido' %}sold{% endif %}">{{ venta.disponibilidad }}</span>
                                 {% endif %}
-                                {% if venta.valorbien %}
-                                    <span class="price-tag">${{ venta.valorbien }}</span>
+                                {% if venta.valordelbien %}
+                                    <span class="price-tag">${{ venta.valordelbien }}</span>
                                 {% endif %}
                             </div>
                             
