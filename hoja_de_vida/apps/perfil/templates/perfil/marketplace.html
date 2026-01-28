@@ -221,7 +221,7 @@
                         <!-- Imagen del producto -->
                         <div class="product-image-wrapper">
                             {% if venta.rutaimagen %}
-                                <img src="{{ venta.rutaimagen }}" alt="{{ venta.nombreproducto }}" class="product-image">
+                                <img src="{% url 'ver_imagen_venta_garage' venta.idventagarage %}" alt="{{ venta.nombreproducto }}" class="product-image">
                             {% else %}
                                 <span class="product-image-placeholder">🖼️</span>
                             {% endif %}
